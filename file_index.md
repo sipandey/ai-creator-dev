@@ -83,7 +83,7 @@ Copy code
 | services/enhanced_persona_service.py | Multi-modal persona orchestration |
 | services/multi_modal_persona_service.py | Processing text/video/audio inputs |
 | services/video_processing_service.py | Video/audio extraction & transcription |
-| services/instagram_api_service.py | Instagram integration logic |
+| services/strategy_service.py | Strategy generation, invalidation, and regeneration logic |
 
 > Services coordinate **agents + DB**, but contain no HTTP logic.
 
