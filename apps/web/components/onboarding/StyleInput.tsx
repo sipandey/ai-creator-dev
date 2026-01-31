@@ -101,7 +101,7 @@ export default function StyleInput({ onSubmit, loading }: Props) {
                   {texts.length > 1 && (
                     <button
                       onClick={() => removeTextSample(index)}
-                      className="absolute top-4 right-4 p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors opacity-0 group-hover:opacity-100"
+                      className="absolute top-4 right-4 p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors"
                       title="Remove sample"
                     >
                       <X size={16} />
