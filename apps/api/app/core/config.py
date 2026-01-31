@@ -12,6 +12,8 @@ load_dotenv()
 class Settings:
     DATABASE_URL: str = os.getenv("DATABASE_URL", "")
     ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")
+    SECRET_KEY: str = os.getenv("SECRET_KEY", os.getenv("JWT_SECRET_KEY", "CHANGE_ME_LATER"))
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 60 * 24))
     
     @property
     def database_url_with_fallback(self) -> str:
@@ -58,6 +60,9 @@ class Settings:
         """Validate required settings"""
         if self.ENVIRONMENT == "production" and not self.DATABASE_URL:
             raise ValueError("DATABASE_URL is required in production environment")
+
+        if self.ENVIRONMENT == "production" and self.SECRET_KEY == "CHANGE_ME_LATER":
+            raise ValueError("SECRET_KEY (or JWT_SECRET_KEY) is required in production environment")
 
 settings = Settings()
 settings.validate()
