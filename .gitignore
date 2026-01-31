@@ -209,6 +209,9 @@ dist
 .cache/
 public
 
+# Exception: Keep web app public folder
+!apps/web/public/
+
 # Storybook build outputs
 .out
 .storybook-out
