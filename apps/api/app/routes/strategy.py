@@ -32,15 +32,28 @@ def get_weekly_strategy(
         .first()
     )
 
-    if existing_strategy:
-        return existing_strategy.strategy_json
-
-    # If not, generate new one
+    # Get persona to check if it was updated after strategy creation
     persona = (
         db.query(CreatorPersona)
         .filter(CreatorPersona.user_id == user.id)
         .first()
     )
+
+    # If strategy exists, check if persona was updated after strategy creation
+    if existing_strategy and persona:
+        if persona.updated_at and existing_strategy.created_at:
+            if persona.updated_at > existing_strategy.created_at:
+                logger.info(f"Persona updated after strategy creation for user {user.id}, regenerating strategy")
+                # Persona was updated after strategy was created, regenerate
+                strategy_service = StrategyService(db)
+                return strategy_service.regenerate_weekly_strategy(user.id)
+
+    if existing_strategy:
+        return existing_strategy.strategy_json
+
+    # If not, generate new one
+    if not persona:
+        raise ValueError(f"No persona found for user {user.id}")
 
     prefs = load_preferences(db, user.id)
 
