@@ -68,15 +68,29 @@ Critical requirements:
         
         # Extract video insights
         video_insights = []
+        detected_languages = []
         for content in video_content:
             content_data = content.get('content', {})
+            language = content_data.get('language', 'english')
+            detected_languages.append(language)
             video_insights.append({
                 'transcript': content_data.get('transcript', ''),
                 'topics': content_data.get('main_topics', []),
+                'language': language,  # Add detected language
                 'style_markers': content_data.get('style_markers', {}),
                 'visual_characteristics': content_data.get('visual_characteristics', {}),
                 'confidence': content.get('metadata', {}).get('confidence_score', 0.5)
             })
+        
+        # Log detected languages for debugging
+        if detected_languages:
+            logger.info(f"Detected languages from video content: {detected_languages}")
+            # Determine primary language (use most common)
+            primary_language = max(set(detected_languages), key=detected_languages.count)
+            logger.info(f"Primary language determined: {primary_language}")
+        else:
+            primary_language = 'english'
+            logger.info("No language detected from video content, defaulting to english")
         
         # Aggregate processing metadata
         processing_summary = {
@@ -95,6 +109,7 @@ Critical requirements:
             'text_samples': text_samples[:5],  # Limit for token efficiency
             'video_insights': video_insights[:5],
             'processing_summary': processing_summary,
+            'detected_primary_language': primary_language,  # Add primary language
             'analysis_timestamp': datetime.utcnow().isoformat()
         }
     
@@ -107,10 +122,12 @@ Analyze this comprehensive creator content to extract an authentic, human-like p
 CONTENT ANALYSIS:
 {json.dumps(content_analysis, indent=2)}
 
+IMPORTANT: The primary language detected from audio analysis is: {content_analysis.get('detected_primary_language', 'english')}
+
 Extract a detailed persona using this exact JSON schema:
 
 {{
-  "language": "english | hinglish | hindi",
+  "language": "{content_analysis.get('detected_primary_language', 'english')}",
   "tone": ["empathetic", "honest", "informative", "motivational", "humorous", "professional", "casual"],
   "energy_level": "low | medium | high",
   "hook_style": "problem-first | story-first | fact-first",

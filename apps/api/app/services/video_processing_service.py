@@ -648,6 +648,7 @@ confidence_score: 0.0-1.0 based on data quality"""
             
             # Ensure language is preserved from audio detection
             synthesis_data['content']['language'] = detected_language
+            logger.info(f"Language set in synthesis data: {detected_language}")
             
             return {
                 'content': synthesis_data,
