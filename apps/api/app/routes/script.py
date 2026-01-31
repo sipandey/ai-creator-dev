@@ -37,9 +37,9 @@ def generate_reel_script(
         .first()
     )
 
+    # If script exists for this topic, return it (scripts are only regenerated when explicitly requested)
+    # Persona changes will invalidate existing scripts through proper channels
     if existing_script:
-        # If exists and is just a draft, return it instead of re-generating
-        # Note: In a real app, you might want an option to 'regenerate' explicitly
         return existing_script
 
     generated_script = generate_script(

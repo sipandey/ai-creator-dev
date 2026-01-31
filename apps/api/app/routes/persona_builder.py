@@ -18,7 +18,7 @@ def build_creator_persona(
 ):
     persona, confidence, source = build_persona(user.creator_type, payload)
 
-    result = upsert_persona(
+    result, persona_changed = upsert_persona(
         db=db,
         user_id=user.id,
         persona=persona,
@@ -26,13 +26,28 @@ def build_creator_persona(
         source=source,
     )
 
-    # Regenerate strategy after persona build
-    try:
-        logger.info(f"Regenerating strategy for user {user.id} after persona build")
-        strategy_service = StrategyService(db)
-        strategy_service.regenerate_weekly_strategy(user.id)
-    except Exception as e:
-        logger.error(f"Failed to regenerate strategy after build for user {user.id}: {str(e)}")
-        # Don't fail the build if strategy regeneration fails
+    # Only invalidate strategy if persona actually changed (which it should for new builds)
+    if persona_changed:
+        try:
+            logger.info(f"Persona built/changed for user {user.id}, invalidating strategy and scripts")
+            strategy_service = StrategyService(db)
+            strategy_service.invalidate_strategy_on_persona_change(user.id)
+
+            # Also invalidate any draft scripts since persona changed
+            from app.models.script import Script, ScriptStatus
+            deleted_scripts = (
+                db.query(Script)
+                .filter(
+                    Script.user_id == user.id,
+                    Script.status == ScriptStatus.DRAFT
+                )
+                .delete()
+            )
+            if deleted_scripts > 0:
+                logger.info(f"Invalidated {deleted_scripts} draft scripts for user {user.id}")
+            db.commit()
+        except Exception as e:
+            logger.error(f"Failed to invalidate content after persona build for user {user.id}: {str(e)}")
+            # Don't fail the build if strategy invalidation fails
 
     return result

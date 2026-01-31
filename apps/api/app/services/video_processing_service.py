@@ -43,27 +43,25 @@ class VideoProcessingService:
         }
     
     def _call_llm_with_json_schema(self, system_prompt: str, user_prompt: str, schema: Dict[str, Any]) -> Dict[str, Any]:
-        """Call LLM with enforced JSON schema response format"""
-        # CHANGE: Added structured JSON response enforcement
-        enhanced_system_prompt = f"""{system_prompt}
+        """Call LLM with enforced JSON schema response format - optimized"""
+        # Compact schema representation
+        compact_schema = json.dumps(schema, separators=(',', ':'))
 
-CRITICAL: You MUST respond with ONLY valid JSON that matches this exact schema:
-{json.dumps(schema, indent=2)}
+        enhanced_system_prompt = f"""You are a content analysis AI. Return ONLY valid JSON matching the schema.
 
-Rules:
-- Return ONLY the JSON object, no markdown, no explanations, no code blocks
-- All property names must be in double quotes
-- All string values must be in double quotes
-- Use null for missing values, not undefined
-- Ensure all required fields are present
-- Do not add any text before or after the JSON"""
+Schema: {compact_schema}
 
-        enhanced_user_prompt = f"""{user_prompt}
+Rules: Return ONLY JSON, no markdown, no explanations."""
 
-RESPONSE FORMAT: Return ONLY valid JSON matching the provided schema. No markdown blocks, no explanations."""
+        enhanced_user_prompt = f"""Analyze content and return JSON matching schema.
+
+{user_prompt}
+
+Return ONLY JSON:"""
 
         try:
-            response = call_llm(enhanced_system_prompt, enhanced_user_prompt)
+            # Use caching for analysis tasks
+            response = call_llm(enhanced_system_prompt, enhanced_user_prompt, use_cache=True)
             
             # CHANGE: Strict JSON validation without markdown extraction
             if not response or not response.strip():
