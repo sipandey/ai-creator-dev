@@ -943,6 +943,9 @@ Visual Style:
 class OpenAISpeechService:
     def __init__(self):
         self.api_key = os.getenv('OPENAI_API_KEY')
+        # Use same httpx client configuration as main LLM client
+        import httpx
+        self.http_client = httpx.AsyncClient()
     
     async def transcribe_audio(self, audio_file_path: str) -> str:
         """Transcribe audio using OpenAI Whisper"""
@@ -952,10 +955,10 @@ class OpenAISpeechService:
         try:
             import openai
             
-            client = openai.OpenAI(api_key=self.api_key)
+            client = openai.AsyncOpenAI(api_key=self.api_key, http_client=self.http_client)
             
             with open(audio_file_path, 'rb') as audio_file:
-                transcript = client.audio.transcriptions.create(
+                transcript = await client.audio.transcriptions.create(
                     model="whisper-1",
                     file=audio_file,
                     response_format="text"
