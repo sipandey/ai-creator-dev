@@ -63,7 +63,7 @@ Return JSON:
   "cta": "call to action"
 }}
 
-Rules: Natural speech, match persona, under 60 seconds, engaging hook."""
+Rules: Natural speech, match persona, under 60 seconds, engaging hook.
 - Empathy level: {persona.get("emotional_markers", {}).get("empathy_level")}
 - Humor style: {persona.get("emotional_markers", {}).get("humor_style")}
 - Authenticity markers to reflect subtly: {persona.get("emotional_markers", {}).get("authenticity_markers", [])}
