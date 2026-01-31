@@ -40,13 +40,27 @@ def refine_persona_api(
 
     db.commit()
 
-    # Regenerate strategy after persona refinement
+    # Persona refinement always changes the persona, so invalidate strategy
     try:
-        logger.info(f"Regenerating strategy for user {user.id} after persona refinement")
+        logger.info(f"Persona refined for user {user.id}, invalidating strategy and scripts")
         strategy_service = StrategyService(db)
-        strategy_service.regenerate_weekly_strategy(user.id)
+        strategy_service.invalidate_strategy_on_persona_change(user.id)
+
+        # Also invalidate any draft scripts since persona changed
+        from app.models.script import Script, ScriptStatus
+        deleted_scripts = (
+            db.query(Script)
+            .filter(
+                Script.user_id == user.id,
+                Script.status == ScriptStatus.DRAFT
+            )
+            .delete()
+        )
+        if deleted_scripts > 0:
+            logger.info(f"Invalidated {deleted_scripts} draft scripts for user {user.id}")
+        db.commit()
     except Exception as e:
-        logger.error(f"Failed to regenerate strategy after refinement for user {user.id}: {str(e)}")
+        logger.error(f"Failed to invalidate content after persona refinement for user {user.id}: {str(e)}")
         # Don't fail the refinement if strategy regeneration fails
 
     return refined
