@@ -51,10 +51,20 @@ llm_cache = LLMCache()
 
 # Create httpx client without proxies
 http_client = httpx.Client()
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"), http_client=http_client)
+
+# Initialize OpenAI client only if API key is available
+api_key = os.getenv("OPENAI_API_KEY")
+if api_key:
+    client = OpenAI(api_key=api_key, http_client=http_client)
+else:
+    client = None
+    logger.warning("OpenAI API key not found. LLM calls will fail until key is set.")
 
 def call_llm(system_prompt: str, user_prompt: str) -> str:
     """Basic LLM call without caching"""
+    if client is None:
+        raise ValueError("OpenAI client not initialized. Please set OPENAI_API_KEY environment variable.")
+
     try:
         response = client.chat.completions.create(
             model="gpt-4o-mini",
