@@ -19,6 +19,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Development warning for React Strict Mode
+  if (process.env.NODE_ENV === 'development') {
+    console.log('ℹ️  Development mode: React Strict Mode may cause components to render twice for debugging purposes. This is normal and helps catch side effects.');
+  }
+
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-slate-50`}>

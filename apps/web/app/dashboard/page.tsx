@@ -26,6 +26,11 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const isDevelopment = process.env.NODE_ENV === 'development';
+    if (isDevelopment) {
+      console.log('🏠 Loading dashboard data...');
+    }
+
     Promise.all([
       getWeeklyStrategy(),
       getPersona(),
@@ -33,6 +38,9 @@ export default function DashboardPage() {
       setStrategy(strategyRes);
       setPersona(personaRes.data);
       setLoading(false);
+      if (isDevelopment) {
+        console.log('✅ Dashboard data loaded successfully');
+      }
     }).catch(err => {
         console.error("Failed to load dashboard data", err);
         setLoading(false);
