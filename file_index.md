@@ -108,6 +108,7 @@ Copy code
 | File          | Description                               |
 | ------------- | ----------------------------------------- |
 | llm/client.py | OpenAI client wrapper (provider-agnostic) |
+| llm/optimizer.py | LLM token optimization utilities         |
 
 > All LLM calls go through this layer.
 

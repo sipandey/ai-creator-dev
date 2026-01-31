@@ -3,6 +3,7 @@ import logging
 from typing import Dict, List, Any, Optional
 from datetime import datetime
 from app.llm.client import call_llm
+from app.llm.optimizer import compress_persona_for_prompt, create_compact_schema_prompt
 from app.schemas.persona_schema import PersonaV2
 
 logger = logging.getLogger(__name__)
@@ -114,82 +115,85 @@ Critical requirements:
         }
     
     async def _generate_persona_with_llm(self, content_analysis: Dict[str, Any]) -> Dict[str, Any]:
-        """Generate persona using advanced LLM analysis"""
-        
-        user_prompt = f"""
-Analyze this comprehensive creator content to extract an authentic, human-like persona:
+        """Generate persona using advanced LLM analysis with optimizations"""
 
-CONTENT ANALYSIS:
-{json.dumps(content_analysis, indent=2)}
+        # Create compact content summary
+        compact_content = {
+            "text_count": len(content_analysis.get('text_samples', [])),
+            "video_count": len(content_analysis.get('video_insights', [])),
+            "language": content_analysis.get('detected_primary_language', 'english'),
+            "confidence": content_analysis.get('processing_summary', {}).get('average_confidence', 0.5),
+            "key_topics": list(set([
+                topic for insight in content_analysis.get('video_insights', [])
+                for topic in insight.get('topics', [])[:2]  # Limit topics per video
+            ]))[:5]  # Max 5 unique topics
+        }
 
-IMPORTANT: The primary language detected from audio analysis is: {content_analysis.get('detected_primary_language', 'english')}
+        # Use compact schema representation
+        compact_schema = create_compact_schema_prompt({
+            "language": "string",
+            "tone": ["string"],
+            "energy_level": "string",
+            "hook_style": "string",
+            "cta_style": "string",
+            "formats": ["string"],
+            "topics": ["string"],
+            "pacing": "string",
+            "communication_patterns": {
+                "sentence_complexity": "string",
+                "vocabulary_level": "string",
+                "filler_words": ["string"],
+                "signature_phrases": ["string"],
+                "question_frequency": "string"
+            },
+            "emotional_markers": {
+                "enthusiasm_indicators": ["string"],
+                "vulnerability_expressions": ["string"],
+                "humor_style": "string",
+                "empathy_level": "string",
+                "authenticity_markers": ["string"]
+            },
+            "visual_preferences": {
+                "color_schemes": ["string"],
+                "text_positioning": "string",
+                "visual_metaphors": ["string"],
+                "background_style": "string"
+            },
+            "timing_patterns": {
+                "pause_frequency": "string",
+                "speech_rhythm": "string",
+                "content_pacing": "string",
+                "hook_timing": "number"
+            },
+            "confidence_score": "number",
+            "version": "string"
+        })
 
-Extract a detailed persona using this exact JSON schema:
+        user_prompt = f"""Analyze creator content and extract persona.
 
-{{
-  "language": "{content_analysis.get('detected_primary_language', 'english')}",
-  "tone": ["empathetic", "honest", "informative", "motivational", "humorous", "professional", "casual"],
-  "energy_level": "low | medium | high",
-  "hook_style": "problem-first | story-first | fact-first",
-  "cta_style": "soft | direct | follow",
-  "formats": ["talking-head", "text-overlay", "b-roll", "tutorial", "lifestyle"],
-  "topics": ["specific topics based on content"],
-  "pacing": "slow | moderate | fast",
-  "communication_patterns": {{
-    "sentence_complexity": "simple | moderate | complex",
-    "vocabulary_level": "casual | professional | academic",
-    "filler_words": ["specific filler words used"],
-    "signature_phrases": ["unique phrases this creator uses"],
-    "question_frequency": "low | medium | high"
-  }},
-  "emotional_markers": {{
-    "enthusiasm_indicators": ["specific enthusiasm markers"],
-    "vulnerability_expressions": ["ways they show vulnerability"],
-    "humor_style": "witty | sarcastic | wholesome | dry | none",
-    "empathy_level": "low | medium | high",
-    "authenticity_markers": ["specific authenticity indicators"]
-  }},
-  "visual_preferences": {{
-    "color_schemes": ["preferred colors from content"],
-    "text_positioning": "top | center | bottom | dynamic",
-    "visual_metaphors": ["visual elements they use"],
-    "background_style": "minimal | busy | branded | natural"
-  }},
-  "timing_patterns": {{
-    "pause_frequency": "low | medium | high",
-    "speech_rhythm": "steady | varied | dramatic",
-    "content_pacing": "slow | moderate | fast",
-    "hook_timing": 3.5
-  }},
-  "confidence_score": 0.85,
-  "content_sources": ["text", "video"],
-  "version": "v2"
-}}
+Content: {json.dumps(compact_content, separators=(',', ':'))}
 
-Analysis Guidelines:
-1. Extract SPECIFIC characteristics unique to this creator
-2. Focus on authentic human traits that make content feel personal
-3. Identify subtle communication patterns and emotional intelligence
-4. Consider cultural context and platform-specific adaptations
-5. Weight video insights more heavily as they contain richer behavioral data
-6. Ensure consistency across different content types
-7. Assign confidence based on data quality and behavioral consistency
+Schema: {compact_schema}
 
-Provide specific, actionable insights that would help generate content that feels authentically like this creator.
-"""
+Return ONLY JSON matching schema."""
 
         try:
-            llm_response = call_llm(self.system_prompt, user_prompt)
-            
+            # Use caching for persona generation (same content = same persona)
+            llm_response = call_llm(self.system_prompt, user_prompt, use_cache=True)
+
             # Clean and parse response
             cleaned_response = self._clean_llm_response(llm_response)
             persona_data = json.loads(cleaned_response)
-            
-            logger.info("LLM persona generation successful")
+
+            # Ensure language is set correctly
+            persona_data['language'] = content_analysis.get('detected_primary_language', 'english')
+            persona_data['version'] = 'v2'
+
+            logger.info("Optimized LLM persona generation successful")
             return persona_data
-            
+
         except (json.JSONDecodeError, ValueError) as e:
-            logger.error(f"LLM returned invalid JSON: {str(e)}")
+            logger.error(f"Optimized LLM returned invalid JSON: {str(e)}")
             raise ValueError(f"LLM persona generation failed: {str(e)}")
     
     def _clean_llm_response(self, response: str) -> str:

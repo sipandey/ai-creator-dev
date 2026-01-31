@@ -1,5 +1,6 @@
 import json
 from app.llm.client import call_llm
+from app.llm.optimizer import compress_persona_for_prompt
 
 SYSTEM_PROMPT = """
 You are an expert short-form video scriptwriting AI.
@@ -35,19 +36,34 @@ def generate_script(persona, topic: str, preferences: dict) -> dict:
     hard = preferences.get("hard", {})
     soft = preferences.get("soft", {})
 
-    user_prompt = f"""
-CREATOR PERSONA (use strictly as instructions):
+    # Use compressed persona for efficiency
+    compressed_persona = compress_persona_for_prompt(persona)
 
-Language & Speech:
-- Language: {persona.get("language")}
-- Vocabulary level: {persona.get("communication_patterns", {}).get("vocabulary_level")}
-- Sentence complexity: {persona.get("communication_patterns", {}).get("sentence_complexity")}
-- Filler words you MAY naturally include: {persona.get("communication_patterns", {}).get("filler_words", [])}
-- Signature phrases you MAY use sparingly: {persona.get("communication_patterns", {}).get("signature_phrases", [])}
+    user_prompt = f"""Write a 60-second video script.
 
-Tone & Emotion:
-- Tone: {persona.get("tone")}
-- Energy level: {persona.get("energy_level")}
+Persona: {compressed_persona}
+Topic: {topic}
+Hard preferences: {json.dumps(hard, separators=(',', ':'))}
+Soft preferences: {json.dumps(soft, separators=(',', ':'))}
+
+Return JSON:
+{{
+  "hook": "attention-grabbing opening",
+  "audio_script": "complete spoken narration under 60 seconds",
+  "scenes": [
+    {{
+      "scene_id": 1,
+      "start_sec": 0,
+      "end_sec": 15,
+      "audio_excerpt": "exact words from audio_script",
+      "visual_direction": "what to show on screen"
+    }}
+  ],
+  "caption": "text overlay for video",
+  "cta": "call to action"
+}}
+
+Rules: Natural speech, match persona, under 60 seconds, engaging hook."""
 - Empathy level: {persona.get("emotional_markers", {}).get("empathy_level")}
 - Humor style: {persona.get("emotional_markers", {}).get("humor_style")}
 - Authenticity markers to reflect subtly: {persona.get("emotional_markers", {}).get("authenticity_markers", [])}
