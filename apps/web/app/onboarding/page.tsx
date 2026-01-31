@@ -21,13 +21,13 @@ export default function OnboardingPage() {
   const [loading, setLoading] = useState(false);
   const [persona, setPersona] = useState<any>(null);
 
-  async function handleSubmit(text: string, urls: string[]) {
+  async function handleSubmit(texts: string[], urls: string[]) {
 
-      setLoading(text.length > 0 || urls.length > 0);
+      setLoading(texts.length > 0 || urls.length > 0);
 
       try {
 
-        const res = await buildPersona([text], urls);
+        const res = await buildPersona(texts, urls);
         console.log("Persona built:", res);
         setPersona(res?.data?.persona);
 

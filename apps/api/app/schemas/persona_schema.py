@@ -89,8 +89,8 @@ class PersonaV2(BaseModel):
     version: str = "v2"
 
 class VideoProcessingRequest(BaseModel):
-    video_urls: List[str] = Field(..., max_items=5)
-    sample_texts: Optional[List[str]] = Field(default_factory=list)
+    video_urls: List[str] = Field(default_factory=list, max_items=5)
+    sample_texts: Optional[List[str]] = Field(default_factory=list, max_items=5)
     creator_id: Optional[int] = None
 
 class ContentSource(BaseModel):

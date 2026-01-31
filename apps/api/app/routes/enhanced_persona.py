@@ -25,10 +25,10 @@ async def create_persona_from_videos(
         # Assign creator_id from the authenticated user
         request.creator_id = current_user.id
         
-        if not request.video_urls:
+        if not request.video_urls and not request.sample_texts:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="At least one video URL is required"
+                detail="At least one video URL or text sample is required"
             )
         
         if len(request.video_urls) > 5:
