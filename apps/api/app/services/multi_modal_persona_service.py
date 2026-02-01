@@ -17,9 +17,28 @@ class MultiModalPersonaService:
     
     def __init__(self, db: Session):
         self.db = db
-        self.video_processor = VideoProcessingService()
-        self.style_analyzer = EnhancedStyleAnalysisAgent()
-        self.strategy_service = StrategyService(db)
+        # Lazy load heavy services to avoid overhead on lightweight requests
+        self._video_processor = None
+        self._style_analyzer = None
+        self._strategy_service = None
+
+    @property
+    def video_processor(self):
+        if not self._video_processor:
+            self._video_processor = VideoProcessingService()
+        return self._video_processor
+
+    @property
+    def style_analyzer(self):
+        if not self._style_analyzer:
+            self._style_analyzer = EnhancedStyleAnalysisAgent()
+        return self._style_analyzer
+
+    @property
+    def strategy_service(self):
+        if not self._strategy_service:
+            self._strategy_service = StrategyService(self.db)
+        return self._strategy_service
     
     async def create_persona_from_videos(self, request: VideoProcessingRequest) -> Dict[str, Any]:
         """Create persona from video URLs with comprehensive error handling"""
