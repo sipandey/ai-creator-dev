@@ -2,7 +2,7 @@
 
 import React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { LucideIcon } from "lucide-react";
+import { LucideIcon, Loader2 } from "lucide-react";
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center rounded-xl font-semibold transition-all active:scale-[0.97] disabled:opacity-50 disabled:pointer-events-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2",
@@ -33,6 +33,7 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   icon?: LucideIcon;
+  isLoading?: boolean;
 }
 
 const Button = ({
@@ -40,15 +41,21 @@ const Button = ({
   variant,
   size,
   icon: Icon,
+  isLoading,
   children,
   ...props
 }: ButtonProps) => {
   return (
     <button
       className={buttonVariants({ variant, size, className })}
+      disabled={isLoading || props.disabled}
       {...props}
     >
-      {Icon && <Icon size={size === 'sm' ? 14 : 18} className="mr-2 stroke-[2.5px]" />}
+      {isLoading ? (
+        <Loader2 size={size === 'sm' ? 14 : 18} className="mr-2 animate-spin" />
+      ) : (
+        Icon && <Icon size={size === 'sm' ? 14 : 18} className="mr-2 stroke-[2.5px]" />
+      )}
       {children}
     </button>
   );

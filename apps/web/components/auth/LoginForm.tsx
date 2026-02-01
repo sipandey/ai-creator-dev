@@ -7,7 +7,7 @@ import { getPersona } from "@/services/persona";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/common/Button";
 import { Card, CardContent } from "@/components/common/Card";
-import { LogIn, ArrowRight, RefreshCw, ShieldCheck } from "lucide-react";
+import { ArrowRight, ShieldCheck } from "lucide-react";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -76,12 +76,12 @@ export default function LoginForm() {
 
           <Button 
             onClick={handleLogin} 
-            disabled={loading} 
+            isLoading={loading}
             className="w-full h-16" 
             size="lg"
-            {... !loading && { icon: ArrowRight }}
+            icon={ArrowRight}
           >
-            {loading ? <span className="animate-spin ml-2">.</span> : "Authorize Access"}
+            Authorize Access
           </Button>
           
           <div className="text-center pt-2">

@@ -6,6 +6,10 @@ from app.models.persona import CreatorPersona
 from app.models.strategy import ContentStrategy
 from app.agents.strategy_agent import generate_weekly_plan as generate_weekly_strategy
 from app.services.preference_service import load_preferences
+from app.services.strategy_service import StrategyService
+import logging
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/strategy")
 
@@ -29,6 +33,8 @@ def get_weekly_strategy(
     )
 
     if existing_strategy:
+        # Return existing strategy - regeneration only happens when explicitly invalidated
+        # (e.g., when persona is actually modified through system settings)
         return existing_strategy.strategy_json
 
     # If not, generate new one
@@ -37,6 +43,9 @@ def get_weekly_strategy(
         .filter(CreatorPersona.user_id == user.id)
         .first()
     )
+
+    if not persona:
+        raise ValueError(f"No persona found for user {user.id}")
 
     prefs = load_preferences(db, user.id)
 
@@ -100,4 +109,26 @@ def force_generate_weekly_plan(
 
     db.commit()
 
+    return strategy_data
+
+@router.post("/invalidate")
+def invalidate_weekly_strategy(
+    db: Session = Depends(get_db),
+    user = Depends(get_current_user),
+):
+    """Invalidate current week's strategy (will be regenerated on next request)"""
+    strategy_service = StrategyService(db)
+    strategy_service.invalidate_strategy_on_persona_change(user.id)
+    
+    return {"message": "Strategy invalidated. Will be regenerated on next request."}
+
+@router.post("/regenerate")
+def force_regenerate_weekly_strategy(
+    db: Session = Depends(get_db),
+    user = Depends(get_current_user),
+):
+    """Force regenerate the current week's strategy"""
+    strategy_service = StrategyService(db)
+    strategy_data = strategy_service.regenerate_weekly_strategy(user.id)
+    
     return strategy_data

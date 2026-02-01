@@ -5,6 +5,7 @@ from app.models.user import User
 from app.services.video_processing_service import VideoProcessingService
 from app.agents.enhanced_style_analysis_agent import EnhancedStyleAnalysisAgent
 from app.schemas.persona_schema import PersonaV2, VideoProcessingRequest
+from app.services.strategy_service import StrategyService
 from datetime import datetime
 import json
 import logging
@@ -18,6 +19,7 @@ class MultiModalPersonaService:
         self.db = db
         self.video_processor = VideoProcessingService()
         self.style_analyzer = EnhancedStyleAnalysisAgent()
+        self.strategy_service = StrategyService(db)
     
     async def create_persona_from_videos(self, request: VideoProcessingRequest) -> Dict[str, Any]:
         """Create persona from video URLs with comprehensive error handling"""
@@ -72,6 +74,15 @@ class MultiModalPersonaService:
             
             # Save to database
             persona = await self._save_persona(request.creator_id, persona_data)
+
+            # Regenerate weekly strategy based on new persona
+            try:
+                logger.info(f"Regenerating strategy for user {request.creator_id} after persona update")
+                self.strategy_service.regenerate_weekly_strategy(request.creator_id)
+            except Exception as e:
+                logger.error(f"Failed to regenerate strategy for user {request.creator_id}: {str(e)}")
+                # Don't fail persona creation if strategy regeneration fails
+                pass
             
             return {
                 'persona': persona_data,
