@@ -6,7 +6,7 @@ import { signup, login } from "@/services/auth";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/common/Button";
 import { Card, CardContent } from "@/components/common/Card";
-import { UserPlus, ArrowRight, RefreshCw, Zap, Shield, User } from "lucide-react";
+import { ArrowRight, Shield, User } from "lucide-react";
 
 /**
  * SignupForm Redesign:
@@ -139,13 +139,13 @@ export default function SignupForm() {
 
           <Button 
             onClick={handleSignup} 
-            disabled={loading} 
+            isLoading={loading}
             className="w-full h-16" 
             size="lg"
             variant="primary"
-            {... !loading && { icon: ArrowRight }}
+            icon={ArrowRight}
           >
-            {loading ? <span className="animate-spin ml-2">.</span> : "Create Identity Account"}
+            Create Identity Account
           </Button>
           
           <div className="text-center pt-2">
