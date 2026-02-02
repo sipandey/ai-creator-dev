@@ -2,6 +2,7 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 const isDevelopment = process.env.NODE_ENV === "development";
 
 // Simple request deduplication cache
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const requestCache = new Map<string, Promise<any>>();
 const CACHE_DURATION = 5000; // 5 seconds
 
