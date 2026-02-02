@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { ArrowRight, Video, Target, Clock, Zap } from "lucide-react";
 import { Card } from "@/components/common/Card";
 
@@ -25,8 +25,6 @@ export default function StrategyCard({
   hook_angle,
   format,
 }: Props) {
-  const router = useRouter();
-
   return (
     <div className="relative pl-12 group transition-all">
       {/* Refined Timeline Node */}
@@ -70,15 +68,15 @@ export default function StrategyCard({
             </p>
           </div>
 
-          <button 
-            onClick={() => router.push(`/script?topic=${encodeURIComponent(topic)}`)}
+          <Link
+            href={`/script?topic=${encodeURIComponent(topic)}`}
             className="w-full h-12 bg-white border border-slate-200 rounded-xl flex items-center justify-center gap-2 active:scale-[0.98] transition-all group/btn hover:border-blue-600 hover:bg-blue-50/30"
           >
             <span className="text-xs font-bold text-blue-600 uppercase tracking-widest group-hover:text-blue-700 transition-colors">
               Draft Script
             </span>
             <ArrowRight size={16} strokeWidth={3} className="text-blue-400 group-hover/btn:text-blue-600 group-hover/btn:translate-x-0.5 transition-all" />
-          </button>
+          </Link>
         </div>
       </Card>
     </div>
