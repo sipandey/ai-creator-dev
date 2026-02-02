@@ -12,5 +12,6 @@ export interface ScriptResponse {
   topic: string;
   script_json: Script;
   status: "DRAFT" | "FILMED" | "PUBLISHED" | "ARCHIVED";
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   performance_data?: Record<string, any> | null;
 }
