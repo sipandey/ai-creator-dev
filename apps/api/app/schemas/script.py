@@ -1,5 +1,8 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional, Dict, Any
+
+class GenerateScriptRequest(BaseModel):
+    topic: str = Field(..., min_length=1, max_length=200, description="The topic for the script")
 
 class ScriptUpdate(BaseModel):
     status: str

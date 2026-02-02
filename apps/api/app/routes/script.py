@@ -5,18 +5,18 @@ from app.models.persona import CreatorPersona
 from app.models.script import Script, ScriptStatus
 from app.agents.script_agent import generate_script
 from app.services.preference_service import load_preferences
-from app.schemas.script import ScriptUpdate, ScriptResponse
+from app.schemas.script import ScriptUpdate, ScriptResponse, GenerateScriptRequest
 import json
 
 router = APIRouter(prefix="/script")
 
 @router.post("", response_model=ScriptResponse)
 def generate_reel_script(
-    payload: dict,
+    request: GenerateScriptRequest,
     db: Session = Depends(get_db),
     user = Depends(get_current_user),
 ):
-    topic = payload.get("topic")
+    topic = request.topic
 
     persona = (
         db.query(CreatorPersona)
