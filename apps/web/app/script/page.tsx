@@ -31,6 +31,7 @@ function ScriptPageContent() {
   const [scriptResponse, setScriptResponse] = useState<any>(null);
   const [showModal, setShowModal] = useState(false);
   const [error, setError] = useState(false);
+  const [isAuthorizing, setIsAuthorizing] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -54,6 +55,7 @@ function ScriptPageContent() {
   }, [topic, id, router]);
 
   async function handlePositive() {
+    setIsAuthorizing(true);
     await submitFeedback({
       target: "script",
       type: "overall",
@@ -165,6 +167,7 @@ function ScriptPageContent() {
               <FeedbackButtons
                 onPositive={handlePositive}
                 onNegative={() => setShowModal(true)}
+                isAuthorizing={isAuthorizing}
               />
             </div>
 

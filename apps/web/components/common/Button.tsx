@@ -34,6 +34,7 @@ export interface ButtonProps
     VariantProps<typeof buttonVariants> {
   icon?: LucideIcon;
   isLoading?: boolean;
+  iconClassName?: string;
 }
 
 const Button = ({
@@ -42,6 +43,7 @@ const Button = ({
   size,
   icon: Icon,
   isLoading,
+  iconClassName,
   children,
   ...props
 }: ButtonProps) => {
@@ -54,7 +56,7 @@ const Button = ({
       {isLoading ? (
         <Loader2 size={size === 'sm' ? 14 : 18} className="mr-2 animate-spin" />
       ) : (
-        Icon && <Icon size={size === 'sm' ? 14 : 18} className="mr-2 stroke-[2.5px]" />
+        Icon && <Icon size={size === 'sm' ? 14 : 18} className={`mr-2 stroke-[2.5px] ${iconClassName || ""}`} />
       )}
       {children}
     </button>

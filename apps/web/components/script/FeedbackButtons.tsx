@@ -1,4 +1,5 @@
 import { ShieldCheck, PenTool } from "lucide-react";
+import { Button } from "@/components/common/Button";
 
 /**
  * Professional QC Feedback Buttons:
@@ -10,26 +11,32 @@ import { ShieldCheck, PenTool } from "lucide-react";
 interface Props {
   onPositive: () => void;
   onNegative: () => void;
+  isAuthorizing?: boolean;
 }
 
-export default function FeedbackButtons({ onPositive, onNegative }: Props) {
+export default function FeedbackButtons({ onPositive, onNegative, isAuthorizing }: Props) {
   return (
     <div className="grid grid-cols-2 gap-4 w-full">
-      <button
+      <Button
+        variant="primary"
         onClick={onPositive}
-        className="h-16 rounded-2xl bg-slate-900 text-white font-black text-xs uppercase tracking-[0.15em] flex items-center justify-center gap-2 shadow-xl shadow-slate-200 active:scale-95 transition-all"
+        isLoading={isAuthorizing}
+        icon={ShieldCheck}
+        iconClassName="text-blue-500"
+        className="h-16 rounded-2xl font-black text-xs uppercase tracking-[0.15em] shadow-xl shadow-slate-200 active:scale-95"
       >
-        <ShieldCheck size={18} strokeWidth={3} className="text-blue-500" /> 
         Authorize
-      </button>
+      </Button>
 
-      <button
+      <Button
+        variant="secondary"
         onClick={onNegative}
-        className="h-16 rounded-2xl bg-white border-2 border-slate-200 text-slate-900 font-black text-xs uppercase tracking-[0.15em] flex items-center justify-center gap-2 active:scale-95 transition-all hover:bg-slate-50"
+        icon={PenTool}
+        iconClassName="text-slate-400"
+        className="h-16 rounded-2xl border-2 font-black text-xs uppercase tracking-[0.15em] active:scale-95 hover:bg-slate-50"
       >
-        <PenTool size={18} strokeWidth={2.5} className="text-slate-400" /> 
         Correct
-      </button>
+      </Button>
     </div>
   );
 }
