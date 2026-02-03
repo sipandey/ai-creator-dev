@@ -101,7 +101,7 @@ export default function DashboardPage() {
                 <Calendar size={14} className="text-blue-600" /> Weekly Blueprint
               </h3>
             </div>
-            <WeekOverview reels={strategy.reels} />
+            <WeekOverview reels={strategy.reels} currentDay={today} />
           </section>
         </div>
       </AppShell>
