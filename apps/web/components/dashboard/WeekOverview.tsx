@@ -1,6 +1,4 @@
-"use client";
-
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { ChevronRight, Clock } from "lucide-react";
 
 /**
@@ -15,18 +13,23 @@ interface Reel {
   format: string;
 }
 
-export default function WeekOverview({ reels }: { reels: Reel[] }) {
-  const router = useRouter();
-  const today = new Date().toLocaleString("en-US", { weekday: "long" });
+interface WeekOverviewProps {
+  reels: Reel[];
+  currentDay?: string;
+}
+
+export default function WeekOverview({ reels, currentDay }: WeekOverviewProps) {
+  // Fallback to server/client time if not provided, though prop is preferred for hydration consistency
+  const today = currentDay || new Date().toLocaleString("en-US", { weekday: "long" });
 
   return (
     <div className="space-y-3">
       {reels.map((r) => {
         const isToday = r.day === today;
         return (
-          <button
+          <Link
             key={r.day}
-            onClick={() => router.push(`/script?topic=${encodeURIComponent(r.topic)}`)}
+            href={`/script?topic=${encodeURIComponent(r.topic)}`}
             className={`w-full flex items-center justify-between p-5 rounded-2xl border transition-all text-left group active:scale-[0.98] ${
               isToday 
                 ? "bg-white border-blue-200 shadow-sm ring-1 ring-blue-50" 
@@ -72,7 +75,7 @@ export default function WeekOverview({ reels }: { reels: Reel[] }) {
               className={`transition-colors ${isToday ? "text-blue-400" : "text-slate-300"}`} 
               strokeWidth={3}
             />
-          </button>
+          </Link>
         );
       })}
     </div>
