@@ -16,6 +16,7 @@ export function getScript(id: number): Promise<ScriptResponse> {
   return apiFetch(`/script/${id}`);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function updateScriptStatus(scriptId: number, status: string, performanceData?: any): Promise<ScriptResponse> {
   return apiFetch(`/script/${scriptId}/status`, {
     method: "POST",

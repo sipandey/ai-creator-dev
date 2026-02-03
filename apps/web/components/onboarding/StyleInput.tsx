@@ -41,10 +41,11 @@ export default function StyleInput({ onSubmit, loading }: Props) {
       </div>
 
       <div className="flex-1 flex flex-col min-h-[320px]">
-        <label className="text-[10px] font-black uppercase text-slate-500 tracking-widest mb-2 ml-1">
+        <label htmlFor="reference-sample" className="text-[10px] font-black uppercase text-slate-500 tracking-widest mb-2 ml-1">
           Reference Sample
         </label>
         <textarea
+          id="reference-sample"
           className="flex-1 w-full p-6 rounded-2xl bg-white border-2 border-slate-200 focus:border-blue-600 text-slate-900 text-lg font-medium leading-relaxed outline-none transition-all resize-none shadow-sm placeholder:text-slate-300"
           placeholder="I'm tired of generic advice. Professionals don't need 'hacks', they need systems that actually scale..."
           value={text}
@@ -61,6 +62,7 @@ export default function StyleInput({ onSubmit, loading }: Props) {
           {urls.map((url, index) => (
             <input
               key={index}
+              aria-label={`Instagram Post URL ${index + 1}`}
               type="url"
               className="w-full p-4 rounded-lg bg-white border-2 border-slate-200 focus:border-blue-600 text-slate-900 font-medium outline-none transition-all placeholder:text-slate-300"
               placeholder={`https://instagram.com/p/your-post-id-${index + 1}`}
@@ -74,14 +76,15 @@ export default function StyleInput({ onSubmit, loading }: Props) {
 
       <div className="mt-8">
         <Button
-          disabled={text.length < 20 || loading}
+          disabled={text.length < 20}
+          isLoading={loading}
           onClick={() => onSubmit(text, urls.filter(url => url.trim() !== ''))}
           className="w-full h-14"
           variant="accent"
           size="xl"
-          {... !loading && { icon: Sparkles }}
+          icon={Sparkles}
         >
-          {loading ? <span className="animate-spin ml-2">.</span> : "Analyze Identity"}
+          Analyze Identity
         </Button>
       </div>
     </div>

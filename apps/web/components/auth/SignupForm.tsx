@@ -72,8 +72,10 @@ export default function SignupForm() {
           {/* Credentials Section */}
           <div className="space-y-5">
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase text-slate-500 tracking-widest ml-1">Work Email</label>
+              <label htmlFor="email" className="text-[10px] font-black uppercase text-slate-500 tracking-widest ml-1">Work Email</label>
               <input
+                id="email"
+                autoComplete="email"
                 type="email"
                 className="w-full h-14 bg-white border-2 border-slate-100 rounded-xl px-6 outline-none focus:border-blue-600 transition-all font-bold text-slate-900"
                 placeholder="name@company.com"
@@ -83,8 +85,10 @@ export default function SignupForm() {
             </div>
             
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase text-slate-500 tracking-widest ml-1">Secure Password</label>
+              <label htmlFor="password" className="text-[10px] font-black uppercase text-slate-500 tracking-widest ml-1">Secure Password</label>
               <input
+                id="password"
+                autoComplete="new-password"
                 type="password"
                 className="w-full h-14 bg-white border-2 border-slate-100 rounded-xl px-6 outline-none focus:border-blue-600 transition-all font-bold text-slate-900"
                 placeholder="••••••••"

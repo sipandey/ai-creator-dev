@@ -47,8 +47,10 @@ export default function LoginForm() {
       <Card className="border-slate-200 shadow-sm">
         <CardContent className="p-8 space-y-6">
           <div className="space-y-2">
-            <label className="text-[10px] font-black uppercase text-slate-500 tracking-widest ml-1">Work Email</label>
+            <label htmlFor="email" className="text-[10px] font-black uppercase text-slate-500 tracking-widest ml-1">Work Email</label>
             <input
+              id="email"
+              autoComplete="email"
               type="email"
               className="w-full h-14 bg-white border-2 border-slate-100 rounded-xl px-6 outline-none focus:border-blue-600 transition-all font-bold text-slate-900"
               placeholder="name@company.com"
@@ -58,8 +60,10 @@ export default function LoginForm() {
           </div>
           
           <div className="space-y-2">
-            <label className="text-[10px] font-black uppercase text-slate-500 tracking-widest ml-1">Secure Password</label>
+            <label htmlFor="password" className="text-[10px] font-black uppercase text-slate-500 tracking-widest ml-1">Secure Password</label>
             <input
+              id="password"
+              autoComplete="current-password"
               type="password"
               className="w-full h-14 bg-white border-2 border-slate-100 rounded-xl px-6 outline-none focus:border-blue-600 transition-all font-bold text-slate-900"
               placeholder="••••••••"
