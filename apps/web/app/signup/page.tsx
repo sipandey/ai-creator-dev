@@ -1,12 +1,7 @@
-"use client";
-
-import { useRouter } from "next/navigation";
 import SignupForm from "@/components/auth/SignupForm";
 import Header from "@/components/layout/Header";
 
 export default function SignupPage() {
-  const router = useRouter();
-
   return (
     <div className="flex-1 flex flex-col bg-white">
       <Header />

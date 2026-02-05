@@ -1,5 +1,3 @@
-"use client";
-
 import HardPreferences from "@/components/preferences/HardPreferences";
 import SoftPreferences from "@/components/preferences/SoftPreferences";
 import AuthGuard from "@/components/common/AuthGuard";
