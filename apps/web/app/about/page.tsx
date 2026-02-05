@@ -1,12 +1,9 @@
-"use client";
-
 import AppShell from "@/components/layout/AppShell";
 import { Card, CardContent } from "@/components/common/Card";
 import { 
   Zap, 
   ShieldCheck, 
   Brain, 
-  Database, 
   Lock, 
   Target,
   Cpu,

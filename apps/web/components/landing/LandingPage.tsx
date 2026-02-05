@@ -1,5 +1,3 @@
-"use client";
-
 import Link from 'next/link';
 import { Zap, ArrowRight, ShieldCheck, PlayCircle } from 'lucide-react';
 import { Button } from '@/components/common/Button';
@@ -54,7 +52,8 @@ export default function LandingPage() {
         {/* Primary Actions */}
         <div className="flex flex-col w-full gap-4 pt-4">
           <Link href="/signup" className="w-full">
-            <Button size="xl" className="w-full h-16" variant="primary" icon={ArrowRight}>
+            <Button size="xl" className="w-full h-16" variant="primary">
+              <ArrowRight size={18} className="mr-2 stroke-[2.5px]" />
               Initialize Engine
             </Button>
           </Link>
