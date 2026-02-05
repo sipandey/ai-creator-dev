@@ -1,3 +1,11 @@
-## 2026-02-01 - Standardized Button Loading State
-**Learning:** Inconsistent loading states (replacing text with dots vs. spinner) harm UX and code maintainability.
-**Action:** Always bake `isLoading` props into core interactive components like `Button` to ensure consistent feedback (spinner + disabled state) and reduce ad-hoc implementation in forms.
+# Palette's Journal - Critical UX/Accessibility Learnings
+
+This journal is for recording CRITICAL learnings about this specific codebase's UX and accessibility patterns.
+It is NOT a changelog. Only record insights that change how we should approach future tasks.
+
+## Format
+`## YYYY-MM-DD - [Title]`
+`**Learning:** [Insight]`
+`**Action:** [How to apply]`
+
+---
