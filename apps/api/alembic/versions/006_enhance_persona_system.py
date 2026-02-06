@@ -30,7 +30,7 @@ def upgrade():
         sa.Column('platform', sa.String(50), nullable=True),  # 'instagram', 'youtube', 'tiktok'
         sa.Column('content_data', postgresql.JSON(astext_type=sa.Text()), nullable=True),
         sa.Column('confidence_contribution', sa.Float(), server_default='0.0'),
-        sa.Column('processed_at', sa.DateTime(timezone=True), server_default=sa.text('now()')),
+        sa.Column('processed_at', sa.DateTime(timezone=True), server_default=sa.func.now()),
         sa.Column('is_active', sa.Boolean(), server_default='true'),
         sa.ForeignKeyConstraint(['creator_id'], ['users.id'], ondelete='CASCADE'),
         sa.PrimaryKeyConstraint('id')
@@ -47,7 +47,7 @@ def upgrade():
         sa.Column('persona_data', postgresql.JSON(astext_type=sa.Text()), nullable=False),
         sa.Column('confidence_score', sa.Float(), nullable=True),
         sa.Column('change_summary', sa.Text(), nullable=True),
-        sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()')),
+        sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.func.now()),
         sa.ForeignKeyConstraint(['creator_id'], ['users.id'], ondelete='CASCADE'),
         sa.PrimaryKeyConstraint('id'),
         sa.UniqueConstraint('creator_id', 'version_number', name='uq_creator_version')

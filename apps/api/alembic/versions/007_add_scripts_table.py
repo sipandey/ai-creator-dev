@@ -26,7 +26,7 @@ def upgrade() -> None:
     sa.Column('script_json', sa.JSON(), nullable=False),
     sa.Column('status', sa.String(), nullable=True),
     sa.Column('performance_data', sa.JSON(), nullable=True),
-    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
+    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=True),
     sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
