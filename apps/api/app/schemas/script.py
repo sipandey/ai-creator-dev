@@ -1,6 +1,9 @@
 from pydantic import BaseModel
 from typing import Optional, Dict, Any
 
+class ScriptGenerateRequest(BaseModel):
+    topic: str
+
 class ScriptUpdate(BaseModel):
     status: str
     performance_data: Optional[Dict[str, Any]] = None
