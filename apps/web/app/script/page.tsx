@@ -34,6 +34,12 @@ function ScriptPageContent() {
 
   useEffect(() => {
     if (id) {
+       // Optimization: Avoid redundant fetch if we just generated this script
+       // We cast to Number to ensure type safety with the URL parameter
+       if (scriptResponse?.id === Number(id)) {
+         return;
+       }
+
        // Load existing script
        getScript(Number(id))
          .then(setScriptResponse)
@@ -42,6 +48,9 @@ function ScriptPageContent() {
     }
 
     if (topic) {
+       // Avoid re-generating if we already have a response (and are waiting for redirect)
+       if (scriptResponse?.topic === topic) return;
+
        // Check for existing draft or create new
        generateScript(topic)
         .then((response) => {
@@ -51,7 +60,7 @@ function ScriptPageContent() {
         })
         .catch(() => setError(true));
     }
-  }, [topic, id, router]);
+  }, [topic, id, router, scriptResponse]);
 
   async function handlePositive() {
     await submitFeedback({
