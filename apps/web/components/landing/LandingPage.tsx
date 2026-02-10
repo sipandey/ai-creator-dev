@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { Zap, ArrowRight, ShieldCheck, PlayCircle } from 'lucide-react';
-import { Button } from '@/components/common/Button';
+import { buttonVariants } from '@/components/common/Button';
 
 /**
  * Landing Page Redesign:
@@ -53,12 +53,14 @@ export default function LandingPage() {
 
         {/* Primary Actions */}
         <div className="flex flex-col w-full gap-4 pt-4">
-          <Link href="/signup" className="w-full">
-            <Button size="xl" className="w-full h-16" variant="primary" icon={ArrowRight}>
-              Initialize Engine
-            </Button>
+          <Link
+            href="/signup"
+            className={buttonVariants({ variant: "primary", size: "xl", className: "w-full h-16" })}
+          >
+            <ArrowRight size={18} className="mr-2 stroke-[2.5px]" />
+            Initialize Engine
           </Link>
-          <Link href="/login" className="w-full text-sm font-bold text-slate-500 hover:text-slate-900 transition-colors">
+          <Link href="/login" className="w-full text-center text-sm font-bold text-slate-500 hover:text-slate-900 transition-colors">
             Already have an identity? <span className="text-slate-900 underline underline-offset-4">Log in</span>
           </Link>
         </div>
