@@ -19,12 +19,12 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade():
-    op.alter_column(
-        "users",
-        "creator_type",
-        type_=sa.String(),
-        existing_nullable=False,
-    )
+    with op.batch_alter_table("users") as batch_op:
+        batch_op.alter_column(
+            "creator_type",
+            type_=sa.String(),
+            existing_nullable=False,
+        )
 
 def downgrade():
     pass
