@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, FormEvent } from "react";
 import Link from "next/link";
 import { login } from "@/services/auth";
 import { getPersona } from "@/services/persona";
@@ -16,7 +16,8 @@ export default function LoginForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  async function handleLogin() {
+  async function handleLogin(e: FormEvent) {
+    e.preventDefault();
     if (!email || !password) {
       setError("Credentials required.");
       return;
@@ -46,43 +47,53 @@ export default function LoginForm() {
 
       <Card className="border-slate-200 shadow-sm">
         <CardContent className="p-8 space-y-6">
-          <div className="space-y-2">
-            <label className="text-[10px] font-black uppercase text-slate-500 tracking-widest ml-1">Work Email</label>
-            <input
-              type="email"
-              className="w-full h-14 bg-white border-2 border-slate-100 rounded-xl px-6 outline-none focus:border-blue-600 transition-all font-bold text-slate-900"
-              placeholder="name@company.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-          
-          <div className="space-y-2">
-            <label className="text-[10px] font-black uppercase text-slate-500 tracking-widest ml-1">Secure Password</label>
-            <input
-              type="password"
-              className="w-full h-14 bg-white border-2 border-slate-100 rounded-xl px-6 outline-none focus:border-blue-600 transition-all font-bold text-slate-900"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-
-          {error && (
-            <div className="p-4 bg-red-50 border border-red-100 rounded-xl text-[11px] font-bold text-red-600 animate-in shake duration-300">
-              {error}
+          <form onSubmit={handleLogin} className="space-y-6">
+            <div className="space-y-2">
+              <label htmlFor="email" className="text-[10px] font-black uppercase text-slate-500 tracking-widest ml-1">Work Email</label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="username"
+                required
+                className="w-full h-14 bg-white border-2 border-slate-100 rounded-xl px-6 outline-none focus:border-blue-600 transition-all font-bold text-slate-900"
+                placeholder="name@company.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
             </div>
-          )}
 
-          <Button 
-            onClick={handleLogin} 
-            isLoading={loading}
-            className="w-full h-16" 
-            size="lg"
-            icon={ArrowRight}
-          >
-            Authorize Access
-          </Button>
+            <div className="space-y-2">
+              <label htmlFor="password" className="text-[10px] font-black uppercase text-slate-500 tracking-widest ml-1">Secure Password</label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                autoComplete="current-password"
+                required
+                className="w-full h-14 bg-white border-2 border-slate-100 rounded-xl px-6 outline-none focus:border-blue-600 transition-all font-bold text-slate-900"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+
+            {error && (
+              <div className="p-4 bg-red-50 border border-red-100 rounded-xl text-[11px] font-bold text-red-600 animate-in shake duration-300">
+                {error}
+              </div>
+            )}
+
+            <Button
+              type="submit"
+              isLoading={loading}
+              className="w-full h-16"
+              size="lg"
+              icon={ArrowRight}
+            >
+              Authorize Access
+            </Button>
+          </form>
           
           <div className="text-center pt-2">
             <Link href="/signup" className="text-xs font-bold text-slate-400 hover:text-slate-900 transition-colors">
