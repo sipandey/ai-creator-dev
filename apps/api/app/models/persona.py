@@ -7,7 +7,7 @@ class CreatorPersona(Base):
     __tablename__ = "creator_persona"  # Keep existing table name for compatibility
 
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False, unique=True, index=True)
     persona_json = Column(JSON, nullable=False)
     confidence_score = Column(Float, nullable=True)
     source = Column(String, nullable=False)
