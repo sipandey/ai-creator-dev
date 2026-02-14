@@ -78,7 +78,12 @@ function ScriptPageContent() {
 
     try {
       const updated = await updateScriptStatus(scriptResponse.id, newStatus);
-      setScriptResponse(updated);
+      setScriptResponse((prev: any) => ({
+        ...updated,
+        // Preserve existing script_json reference if present to prevent
+        // unnecessary re-renders of memoized ScriptViewer
+        script_json: prev?.script_json || updated.script_json
+      }));
     } catch (e) {
       console.error("Failed to update status", e);
     }
