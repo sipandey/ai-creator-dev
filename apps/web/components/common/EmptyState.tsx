@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Inbox, Plus } from "lucide-react";
-import { Button } from "@/components/common/Button";
+import { buttonVariants } from "@/components/common/button-variants";
 
 /**
  * EmptyState Redesign:
@@ -23,23 +23,35 @@ export default function EmptyState({
 }: Props) {
   return (
     <div className="flex flex-col items-center text-center py-20 px-8 space-y-8 animate-in fade-in duration-500">
-      <div className="w-20 h-20 bg-slate-50 border-2 border-dashed border-slate-200 rounded-3xl flex items-center justify-center text-slate-300">
+      <div
+        className="w-20 h-20 bg-slate-50 border-2 border-dashed border-slate-200 rounded-3xl flex items-center justify-center text-slate-300"
+        aria-hidden="true"
+      >
         <Inbox size={32} strokeWidth={1.5} />
       </div>
 
       <div className="space-y-3">
-        <h2 className="text-2xl font-black text-slate-900 tracking-tight leading-tight">
+        <h2
+          id="empty-state-title"
+          className="text-2xl font-black text-slate-900 tracking-tight leading-tight"
+        >
           {title}
         </h2>
-        <p className="text-slate-700 font-medium text-sm leading-relaxed px-4">
+        <p
+          id="empty-state-description"
+          className="text-slate-700 font-medium text-sm leading-relaxed px-4"
+        >
           {description}
         </p>
       </div>
 
-      <Link href={ctaHref} className="w-full">
-        <Button variant="primary" className="w-full h-14" size="lg" icon={Plus}>
-          {ctaLabel}
-        </Button>
+      <Link
+        href={ctaHref}
+        className={`${buttonVariants({ variant: "primary", size: "lg" })} w-full h-14`}
+        aria-describedby="empty-state-description"
+      >
+        <Plus size={18} className="mr-2 stroke-[2.5px]" />
+        {ctaLabel}
       </Link>
     </div>
   );
