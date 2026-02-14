@@ -1,5 +1,6 @@
-import { Mic2, Video, MessageSquare, Bookmark, Target, Timer } from "lucide-react";
+import { Mic2, Video, MessageSquare, Bookmark, Timer } from "lucide-react";
 import { Card } from "@/components/common/Card";
+import { memo } from "react";
 
 /**
  * ScriptViewer Redesign (New Schema):
@@ -25,7 +26,7 @@ interface Script {
   estimated_duration_sec: number;
 }
 
-export default function ScriptViewer({ script }: { script: Script }) {
+function ScriptViewer({ script }: { script: Script }) {
   return (
     <div className="flex flex-col gap-8 animate-in fade-in duration-500">
       
@@ -128,3 +129,5 @@ export default function ScriptViewer({ script }: { script: Script }) {
     </div>
   );
 }
+
+export default memo(ScriptViewer);
