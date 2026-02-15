@@ -24,3 +24,7 @@ class Script(Base):
 
     # Relationships
     creator = relationship("User", back_populates="scripts")
+
+    @property
+    def hook(self):
+        return self.script_json.get("hook") if self.script_json else None

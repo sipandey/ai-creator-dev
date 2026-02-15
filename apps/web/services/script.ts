@@ -1,5 +1,5 @@
 import { apiFetch } from "./api";
-import { ScriptResponse } from "@/types/script";
+import { ScriptResponse, ScriptListResponse } from "@/types/script";
 
 export function generateScript(topic: string): Promise<ScriptResponse> {
   return apiFetch("/script", {
@@ -8,7 +8,7 @@ export function generateScript(topic: string): Promise<ScriptResponse> {
   });
 }
 
-export function getScripts(): Promise<ScriptResponse[]> {
+export function getScripts(): Promise<ScriptListResponse[]> {
   return apiFetch("/script");
 }
 
