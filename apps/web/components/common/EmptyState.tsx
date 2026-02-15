@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Inbox, Plus } from "lucide-react";
-import { Button } from "@/components/common/Button";
+import { buttonVariants } from "@/components/common/button-variants";
 
 /**
  * EmptyState Redesign:
@@ -36,10 +36,16 @@ export default function EmptyState({
         </p>
       </div>
 
-      <Link href={ctaHref} className="w-full">
-        <Button variant="primary" className="w-full h-14" size="lg" icon={Plus}>
-          {ctaLabel}
-        </Button>
+      <Link
+        href={ctaHref}
+        className={buttonVariants({
+          variant: "primary",
+          size: "lg",
+          className: "w-full h-14",
+        })}
+      >
+        <Plus size={18} className="mr-2 stroke-[2.5px]" />
+        {ctaLabel}
       </Link>
     </div>
   );
