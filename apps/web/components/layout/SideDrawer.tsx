@@ -43,6 +43,7 @@ export default function SideDrawer({
                       : "text-gray-600 hover:bg-gray-100"
                   }`}
                   onClick={onClose}
+                  aria-current={pathname === link.href ? "page" : undefined}
                 >
                   {link.label}
                 </Link>

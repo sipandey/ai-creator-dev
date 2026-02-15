@@ -22,6 +22,7 @@ export default function NavLink({
       className={`block px-4 py-3 rounded-md text-sm ${
         active ? "bg-gray-100 font-medium" : ""
       }`}
+      aria-current={active ? "page" : undefined}
     >
       {label}
     </Link>
