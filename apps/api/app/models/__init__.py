@@ -9,6 +9,8 @@ from .persona import CreatorPersona
 from .feedback import Feedback
 from .preference import Preference
 from .content_source import ContentSource
+from .script import Script
+from .strategy import ContentStrategy
 
 # Make sure all models are available for alembic
 __all__ = [
@@ -17,5 +19,7 @@ __all__ = [
     "CreatorPersona",
     "Feedback", 
     "Preference",
-    "ContentSource"
+    "ContentSource",
+    "Script",
+    "ContentStrategy"
 ]

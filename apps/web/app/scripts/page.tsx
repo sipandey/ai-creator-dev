@@ -2,14 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { getScripts } from "@/services/script";
-import { ScriptResponse } from "@/types/script";
+import { ScriptListResponse } from "@/types/script";
 import AppShell from "@/components/layout/AppShell";
 import AuthGuard from "@/components/common/AuthGuard";
 import { useRouter } from "next/navigation";
 import { CheckCircle, CircleDashed, UploadCloud, Archive, FileText } from "lucide-react";
 
 export default function ScriptLibraryPage() {
-  const [scripts, setScripts] = useState<ScriptResponse[]>([]);
+  const [scripts, setScripts] = useState<ScriptListResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
@@ -77,10 +77,10 @@ export default function ScriptLibraryPage() {
                     </div>
                   </div>
                   <p className="text-xs text-slate-500 font-medium line-clamp-2 mb-3">
-                    {script.script_json.hook}
+                    {script.hook}
                   </p>
                   <div className="text-[10px] text-slate-400 font-semibold">
-                    Last updated: {new Date().toLocaleDateString()}
+                    Last updated: {new Date(script.updated_at || script.created_at).toLocaleDateString()}
                   </div>
                 </button>
               ))}

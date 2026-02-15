@@ -14,3 +14,13 @@ export interface ScriptResponse {
   status: "DRAFT" | "FILMED" | "PUBLISHED" | "ARCHIVED";
   performance_data?: Record<string, any> | null;
 }
+
+export interface ScriptListResponse {
+  id: number;
+  user_id: number;
+  topic: string;
+  status: "DRAFT" | "FILMED" | "PUBLISHED" | "ARCHIVED";
+  hook: string;
+  created_at: string;
+  updated_at: string | null;
+}
