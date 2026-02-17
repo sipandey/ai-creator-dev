@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from app.models.user import User
-from app.core.security import hash_password, verify_password
+from app.core.security import hash_password, verify_password, DUMMY_HASH
 
 def create_user(db: Session, email: str, password: str, creator_type: str):
     user = User(
@@ -15,8 +15,13 @@ def create_user(db: Session, email: str, password: str, creator_type: str):
 
 def authenticate_user(db: Session, email: str, password: str):
     user = db.query(User).filter(User.email == email).first()
-    if not user:
-        return None
-    if not verify_password(password, user.password_hash):
-        return None
-    return user
+
+    # Always perform password verification to prevent timing attacks
+    if user:
+        if verify_password(password, user.password_hash):
+            return user
+    else:
+        # User not found, verify against dummy hash
+        verify_password(password, DUMMY_HASH)
+
+    return None
