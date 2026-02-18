@@ -1,8 +1,8 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { Zap, ArrowRight, Clock } from "lucide-react";
-import { Button } from "@/components/common/Button";
+import { buttonVariants } from "@/components/common/button-variants";
 
 interface Reel {
   day: string;
@@ -12,8 +12,6 @@ interface Reel {
 }
 
 export default function TodayFocusCard({ reel }: { reel: Reel }) {
-  const router = useRouter();
-
   if (!reel) return null;
 
   return (
@@ -42,14 +40,14 @@ export default function TodayFocusCard({ reel }: { reel: Reel }) {
           </p>
         </div>
         
-        <Button 
-          variant="accent" 
-          className="w-full" 
-          onClick={() => router.push(`/script?topic=${encodeURIComponent(reel.topic)}`)}
-          icon={ArrowRight}
+        {/* Optimization: Use Link for prefetching instead of router.push */}
+        <Link
+          href={`/script?topic=${encodeURIComponent(reel.topic)}`}
+          className={buttonVariants({ variant: "accent", className: "w-full" })}
         >
+          <ArrowRight size={18} className="mr-2 stroke-[2.5px]" />
           Generate Script
-        </Button>
+        </Link>
       </div>
     </div>
   );

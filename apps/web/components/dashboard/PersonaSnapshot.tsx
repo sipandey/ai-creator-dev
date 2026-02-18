@@ -1,9 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { ShieldCheck, Activity, Target, RefreshCw, Mic2, Zap, MessageSquare, BookOpen, Smile } from "lucide-react";
+import Link from "next/link";
+import { Activity, RefreshCw, Zap, MessageSquare, BookOpen, Smile } from "lucide-react";
 import { Card } from "@/components/common/Card";
-import { useRouter } from "next/navigation";
 import { Persona } from "@/types/persona";
 
 
@@ -23,17 +22,17 @@ const DetailChip = ({ label }: { label: string }) => (
 );
 
 export default function PersonaSnapshot({ persona }: Props) {
-  const router = useRouter();
   
   if (!persona) return (
     <Card className="border-slate-200 bg-white p-6">
        <p className="text-sm font-semibold text-slate-500">Persona not loaded. Please complete onboarding.</p>
-       <button 
-          onClick={() => router.push('/onboarding')}
+       {/* Optimization: Use Link for prefetching */}
+       <Link
+          href="/onboarding"
           className="mt-4 flex items-center gap-1.5 text-sm font-black text-blue-600 uppercase hover:text-blue-800 transition-colors"
         >
           <RefreshCw size={12} strokeWidth={3} /> Create Persona
-        </button>
+        </Link>
     </Card>
   );
 
@@ -87,12 +86,13 @@ export default function PersonaSnapshot({ persona }: Props) {
         <p className="text-[10px] font-bold text-slate-500 uppercase tracking-tight">
           Confidence: <span className="text-blue-600">{Math.round(persona.confidence_score * 100)}%</span>
         </p>
-        <button 
-          onClick={() => router.push('/onboarding')}
+        {/* Optimization: Use Link for prefetching */}
+        <Link
+          href="/onboarding"
           className="flex items-center gap-1.5 text-[10px] font-black text-blue-600 uppercase hover:text-blue-800 transition-colors"
         >
           <RefreshCw size={12} strokeWidth={3} /> Update Model
-        </button>
+        </Link>
       </div>
     </Card>
   );
