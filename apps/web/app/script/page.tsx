@@ -1,10 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState, Suspense } from "react";
 import { generateScript, updateScriptStatus, getScript } from "@/services/script";
 import { submitFeedback } from "@/services/feedback";
+import type { ScriptResponse } from "@/types/script";
 import ScriptViewer from "@/components/script/ScriptViewer";
 import ScriptLifecycle from "@/components/script/ScriptLifecycle";
 import FeedbackButtons from "@/components/script/FeedbackButtons";
@@ -28,11 +28,22 @@ function ScriptPageContent() {
   const id = params.get("id");
   const router = useRouter();
 
-  const [scriptResponse, setScriptResponse] = useState<any>(null);
+  const [scriptResponse, setScriptResponse] = useState<ScriptResponse | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [error, setError] = useState(false);
 
   useEffect(() => {
+    // Optimization: Avoid redundant fetches if the script is already loaded.
+    // This handles the case where generating a script redirects to the ID-based URL.
+    if (id && scriptResponse?.id === Number(id)) {
+      return;
+    }
+
+    // Also avoid re-generation if we already have the script for the current topic
+    if (topic && scriptResponse?.topic === topic) {
+      return;
+    }
+
     if (id) {
        // Load existing script
        getScript(Number(id))
@@ -51,7 +62,7 @@ function ScriptPageContent() {
         })
         .catch(() => setError(true));
     }
-  }, [topic, id, router]);
+  }, [topic, id, router, scriptResponse]);
 
   async function handlePositive() {
     await submitFeedback({
