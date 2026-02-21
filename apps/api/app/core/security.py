@@ -1,5 +1,9 @@
 import bcrypt
 
+# Generate a dummy hash at startup for timing attack mitigation
+# This ensures that invalid login attempts take roughly the same amount of time as valid ones
+DUMMY_HASH = bcrypt.hashpw(b"dummy_password", bcrypt.gensalt()).decode('utf-8')
+
 def hash_password(password: str) -> str:
     # bcrypt has a 72-byte limit, truncate if necessary
     truncated_password = password.encode('utf-8')[:72].decode('utf-8', errors='ignore')
