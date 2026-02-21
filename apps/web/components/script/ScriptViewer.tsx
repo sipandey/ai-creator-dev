@@ -1,5 +1,6 @@
 import { Mic2, Video, MessageSquare, Bookmark, Target, Timer } from "lucide-react";
 import { Card } from "@/components/common/Card";
+import { CopyButton } from "@/components/common/CopyButton";
 
 /**
  * ScriptViewer Redesign (New Schema):
@@ -38,9 +39,16 @@ export default function ScriptViewer({ script }: { script: Script }) {
 
       {/* Hook Section - High Contrast for Speed Reading */}
       <div className="bg-slate-900 rounded-2xl p-6 text-white shadow-sm border border-slate-800">
-        <label className="text-[10px] font-black uppercase text-blue-400 tracking-widest mb-2 block flex items-center gap-1">
-          <Bookmark size={12} fill="currentColor" /> The Hook
-        </label>
+        <div className="flex items-center justify-between mb-2">
+          <label className="text-[10px] font-black uppercase text-blue-400 tracking-widest flex items-center gap-1">
+            <Bookmark size={12} fill="currentColor" /> The Hook
+          </label>
+          <CopyButton
+            text={script.hook}
+            className="!text-slate-400 hover:!text-white hover:!bg-slate-800"
+            label="Copy hook"
+          />
+        </div>
         <p className="text-xl font-bold leading-snug">
           {script.hook}
         </p>
@@ -88,10 +96,11 @@ export default function ScriptViewer({ script }: { script: Script }) {
       {/* Audio Script Block - Teleprompter Optimized */}
       <section className="space-y-4">
         <Card className="border-blue-100 bg-blue-50/20">
-        <div className="p-5 border-b border-slate-100 bg-slate-50">
+        <div className="p-5 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
             <label className="text-[10px] font-black uppercase text-blue-600 tracking-widest flex items-center gap-2">
               <Mic2 size={14} /> Script
             </label>
+            <CopyButton text={script.audio_script} label="Copy script" />
           </div>
           <div className="p-8">
             <p className="text-xl text-slate-900 leading-relaxed font-bold selection:bg-blue-200">
@@ -104,20 +113,26 @@ export default function ScriptViewer({ script }: { script: Script }) {
       {/* Caption & CTA Block */}
       <div className="grid gap-4">
         <Card className="bg-slate-50 border-slate-100">
-          <div className="p-5 border-b border-slate-100 bg-slate-50">
+          <div className="p-5 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
             <label className="text-[10px] font-black uppercase text-blue-600 tracking-widest flex items-center gap-2">
               <MessageSquare size={14} className="text-blue-600" /> Caption & CTA
             </label>
           </div>
           <div className="p-6 space-y-6">
             <div className="space-y-2">
-              <p className="text-xs font-black text-blue-400 uppercase tracking-widest">Caption</p>
+              <div className="flex items-center justify-between">
+                <p className="text-xs font-black text-blue-400 uppercase tracking-widest">Caption</p>
+                <CopyButton text={script.caption} label="Copy caption" size="sm" />
+              </div>
               <p className="text-sm text-slate-700 leading-relaxed font-semibold">
                 {script.caption}
               </p>
             </div>
             <div className="pt-6 border-t border-slate-200/60 space-y-2">
-              <p className="text-xs font-black text-blue-400 uppercase tracking-widest">Call to Action</p>
+              <div className="flex items-center justify-between">
+                <p className="text-xs font-black text-blue-400 uppercase tracking-widest">Call to Action</p>
+                <CopyButton text={script.cta} label="Copy CTA" size="sm" />
+              </div>
               <p className="text-sm text-slate-900 font-semibold leading-relaxed">
                 {script.cta}
               </p>
