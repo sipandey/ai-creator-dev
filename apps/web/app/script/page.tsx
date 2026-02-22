@@ -2,7 +2,7 @@
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
-import { useEffect, useState, Suspense } from "react";
+import { useEffect, useState, useRef, Suspense } from "react";
 import { generateScript, updateScriptStatus, getScript } from "@/services/script";
 import { submitFeedback } from "@/services/feedback";
 import ScriptViewer from "@/components/script/ScriptViewer";
@@ -31,9 +31,16 @@ function ScriptPageContent() {
   const [scriptResponse, setScriptResponse] = useState<any>(null);
   const [showModal, setShowModal] = useState(false);
   const [error, setError] = useState(false);
+  const justGenerated = useRef(false);
 
   useEffect(() => {
     if (id) {
+       // Optimization: Avoid re-fetching if we already have the data (e.g. after generation)
+       if (justGenerated.current) {
+         justGenerated.current = false;
+         return;
+       }
+
        // Load existing script
        getScript(Number(id))
          .then(setScriptResponse)
@@ -45,6 +52,7 @@ function ScriptPageContent() {
        // Check for existing draft or create new
        generateScript(topic)
         .then((response) => {
+            justGenerated.current = true;
             setScriptResponse(response);
             // Replace URL with ID to avoid re-generation on refresh
             router.replace(`/script?id=${response.id}`);
