@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { 
   Calendar, 
@@ -88,32 +89,34 @@ export default function AppShell({ children, title }: Props) {
         {navItems.slice(0, 2).map((item) => {
           const isActive = pathname === item.href;
           return (
-            <button
+            <Link
               key={item.href}
-              onClick={() => router.push(item.href)}
+              href={item.href}
               className={`flex flex-col items-center gap-1.5 transition-all w-12 ${
                 isActive ? "text-blue-600" : "text-slate-400 hover:text-slate-600"
               }`}
+              aria-current={isActive ? "page" : undefined}
             >
               <item.icon size={22} strokeWidth={isActive ? 3 : 2} />
               <span className="text-[9px] font-black uppercase tracking-tight">{item.label}</span>
-            </button>
+            </Link>
           );
         })}
 
         {/* Central Hub Navigation Button */}
         <div className="relative -mt-16">
-          <button
-            onClick={() => router.push("/dashboard")}
+          <Link
+            href="/dashboard"
             className={`w-16 h-16 rounded-2xl flex items-center justify-center border-[6px] border-white active:scale-90 transition-all group ${
               isHubActive 
                 ? "bg-blue-600 text-white shadow-[0_0_25px_rgba(37,99,235,0.4)] ring-2 ring-blue-600" 
                 : "bg-slate-900 text-white shadow-2xl shadow-slate-400"
             }`}
             aria-label="Production Hub"
+            aria-current={isHubActive ? "page" : undefined}
           >
             <LayoutGrid size={28} strokeWidth={3} className={isHubActive ? "" : "group-hover:rotate-6 transition-transform"} />
-          </button>
+          </Link>
           {isHubActive && (
              <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[9px] font-black text-blue-600 uppercase tracking-widest">
                 Hub
@@ -124,16 +127,17 @@ export default function AppShell({ children, title }: Props) {
         {navItems.slice(2).map((item) => {
           const isActive = pathname === item.href;
           return (
-            <button
+            <Link
               key={item.href}
-              onClick={() => router.push(item.href)}
+              href={item.href}
               className={`flex flex-col items-center gap-1.5 transition-all w-12 ${
                 isActive ? "text-blue-600" : "text-slate-400 hover:text-slate-600"
               }`}
+              aria-current={isActive ? "page" : undefined}
             >
               <item.icon size={22} strokeWidth={isActive ? 3 : 2} />
               <span className="text-[9px] font-black uppercase tracking-tight">{item.label}</span>
-            </button>
+            </Link>
           );
         })}
       </nav>
