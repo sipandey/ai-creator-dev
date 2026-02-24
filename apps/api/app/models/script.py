@@ -14,7 +14,7 @@ class Script(Base):
     __tablename__ = "scripts"
 
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
     topic = Column(String, nullable=False)
     script_json = Column(JSON, nullable=False)
     status = Column(String, default=ScriptStatus.DRAFT)
