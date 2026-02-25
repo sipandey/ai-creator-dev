@@ -31,6 +31,7 @@ function ScriptPageContent() {
   const [scriptResponse, setScriptResponse] = useState<any>(null);
   const [showModal, setShowModal] = useState(false);
   const [error, setError] = useState(false);
+  const [isAuthorizing, setIsAuthorizing] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -54,12 +55,18 @@ function ScriptPageContent() {
   }, [topic, id, router]);
 
   async function handlePositive() {
-    await submitFeedback({
-      target: "script",
-      type: "overall",
-      signal: "positive",
-    });
-    router.push("/dashboard");
+    setIsAuthorizing(true);
+    try {
+      await submitFeedback({
+        target: "script",
+        type: "overall",
+        signal: "positive",
+      });
+      router.push("/dashboard");
+    } catch (error) {
+      console.error("Failed to authorize script:", error);
+      setIsAuthorizing(false);
+    }
   }
 
   async function handleNegative(type: string, comment?: string) {
@@ -165,6 +172,7 @@ function ScriptPageContent() {
               <FeedbackButtons
                 onPositive={handlePositive}
                 onNegative={() => setShowModal(true)}
+                isAuthorizing={isAuthorizing}
               />
             </div>
 
