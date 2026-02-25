@@ -1,4 +1,5 @@
-import { Mic2, Video, MessageSquare, Bookmark, Target, Timer } from "lucide-react";
+import { memo } from "react";
+import { Mic2, Video, MessageSquare, Bookmark, Timer } from "lucide-react";
 import { Card } from "@/components/common/Card";
 
 /**
@@ -25,7 +26,7 @@ interface Script {
   estimated_duration_sec: number;
 }
 
-export default function ScriptViewer({ script }: { script: Script }) {
+function ScriptViewer({ script }: { script: Script }) {
   return (
     <div className="flex flex-col gap-8 animate-in fade-in duration-500">
       
@@ -128,3 +129,9 @@ export default function ScriptViewer({ script }: { script: Script }) {
     </div>
   );
 }
+
+// ⚡ Bolt: Memoize this component to prevent unnecessary re-renders when parent state updates (e.g. status changes).
+// Deep comparison of the script object ensures we only re-render if the content actually changes.
+export default memo(ScriptViewer, (prev, next) => {
+  return JSON.stringify(prev.script) === JSON.stringify(next.script);
+});
