@@ -12,3 +12,6 @@ def verify_password(password: str, password_hash: str) -> bool:
     # bcrypt has a 72-byte limit, truncate if necessary
     truncated_password = password.encode('utf-8')[:72].decode('utf-8', errors='ignore')
     return bcrypt.checkpw(truncated_password.encode('utf-8'), password_hash.encode('utf-8'))
+
+# Generate a dummy hash at startup to be used for timing attack mitigation
+DUMMY_HASH = hash_password("dummy_password_for_timing_mitigation")
