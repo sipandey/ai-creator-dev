@@ -6,7 +6,7 @@ import { signup, login } from "@/services/auth";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/common/Button";
 import { Card, CardContent } from "@/components/common/Card";
-import { ArrowRight, Shield, User } from "lucide-react";
+import { ArrowRight, Shield, User, Eye, EyeOff } from "lucide-react";
 
 /**
  * SignupForm Redesign:
@@ -19,6 +19,7 @@ export default function SignupForm() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [creatorType, setCreatorType] = useState("new");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -84,13 +85,23 @@ export default function SignupForm() {
             
             <div className="space-y-2">
               <label className="text-[10px] font-black uppercase text-slate-500 tracking-widest ml-1">Secure Password</label>
-              <input
-                type="password"
-                className="w-full h-14 bg-white border-2 border-slate-100 rounded-xl px-6 outline-none focus:border-blue-600 transition-all font-bold text-slate-900"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  className="w-full h-14 bg-white border-2 border-slate-100 rounded-xl px-6 outline-none focus:border-blue-600 transition-all font-bold text-slate-900 pr-12"
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
+              </div>
             </div>
           </div>
 
