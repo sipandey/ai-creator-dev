@@ -1,0 +1,3 @@
+## 2024-05-18 - AppShell Account Settings Modal ARIA Enhancements
+**Learning:** Custom modal dialogs (like the Account Settings menu in AppShell) lacking structural ARIA roles (`role="dialog"`, `aria-modal="true"`) and descriptive text on icon-only close buttons fail to be correctly navigated and interpreted by screen readers. The visual `div` background acting as a backdrop may also accidentally capture screen reader focus unless specifically hidden with `aria-hidden="true"`.
+**Action:** Always ensure any custom-built modal popovers use standard ARIA `dialog` conventions and ensure icon-only interactable elements have an `aria-label`.
