@@ -142,14 +142,23 @@ export default function AppShell({ children, title }: Props) {
       {isMenuOpen && (
         <div className="fixed inset-0 z-[100] animate-in fade-in duration-300">
           <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setIsMenuOpen(false)} />
-          <div className="absolute bottom-0 left-0 right-0 max-w-md mx-auto bg-white rounded-t-[2.5rem] shadow-2xl animate-in slide-in-from-bottom-full duration-400">
+          <div
+            className="absolute bottom-0 left-0 right-0 max-w-md mx-auto bg-white rounded-t-[2.5rem] shadow-2xl animate-in slide-in-from-bottom-full duration-400"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="settings-title"
+          >
             <div className="p-8 space-y-8">
               <header className="flex items-center justify-between">
                 <div className="space-y-1">
-                  <h2 className="text-2xl font-black text-slate-900 tracking-tight">System Settings</h2>
+                  <h2 id="settings-title" className="text-2xl font-black text-slate-900 tracking-tight">System Settings</h2>
                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Creator AI Identity Engine v1.0.4</p>
                 </div>
-                <button onClick={() => setIsMenuOpen(false)} className="p-2 text-slate-300 hover:text-slate-900">
+                <button
+                  onClick={() => setIsMenuOpen(false)}
+                  className="p-2 text-slate-300 hover:text-slate-900"
+                  aria-label="Close system settings"
+                >
                   <X size={28} strokeWidth={3} />
                 </button>
               </header>
