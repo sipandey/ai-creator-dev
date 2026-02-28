@@ -7,7 +7,7 @@ class ContentSource(Base):
     __tablename__ = "content_sources"
     
     id = Column(Integer, primary_key=True, index=True)
-    creator_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    creator_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
     source_url = Column(String(500), nullable=True)  # For video URLs
     source_type = Column(String(50), nullable=False, index=True)  # 'video', 'text', 'manual'
     platform = Column(String(50), nullable=True)  # 'instagram', 'youtube', 'tiktok'
