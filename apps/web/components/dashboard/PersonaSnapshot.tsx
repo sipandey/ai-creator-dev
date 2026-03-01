@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 "use client";
 
 import { ShieldCheck, Activity, Target, RefreshCw, Mic2, Zap, MessageSquare, BookOpen, Smile } from "lucide-react";
