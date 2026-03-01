@@ -12,5 +12,5 @@ export interface ScriptResponse {
   topic: string;
   script_json: Script;
   status: "DRAFT" | "FILMED" | "PUBLISHED" | "ARCHIVED";
-  performance_data?: Record<string, any> | null;
+  performance_data?: Record<string, unknown> | null;
 }

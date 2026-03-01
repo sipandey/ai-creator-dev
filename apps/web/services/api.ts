@@ -2,10 +2,10 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 const isDevelopment = process.env.NODE_ENV === "development";
 
 // Simple request deduplication cache
-const requestCache = new Map<string, Promise<any>>();
+const requestCache = new Map<string, Promise<unknown>>();
 const CACHE_DURATION = 5000; // 5 seconds
 
-export async function apiFetch(path: string, options: RequestInit = {}) {
+export async function apiFetch(path: string, options: RequestInit = {}): Promise<unknown> {
   const token = localStorage.getItem("token");
   const method = options.method || "GET";
   const cacheKey = `${method}:${path}`;

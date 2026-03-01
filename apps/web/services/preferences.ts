@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { Preference } from "@/types/preferences";
 import { apiFetch } from "./api";
 
