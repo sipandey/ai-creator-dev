@@ -7,8 +7,7 @@ class Feedback(Base):
     __tablename__ = "feedback"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    # ⚡ Bolt: Added index=True to user_id to optimize tenant-scoped queries
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), index=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     target: Mapped[str] = mapped_column(String)  
     # "script" | "strategy"
 
